@@ -1,17 +1,19 @@
 <article class="collection-item-card">
-  <span class="rarity-chip">Legendary</span>
+  <span class="rarity-chip">{{ item().rarity }}</span>
 
   <figure class="item-image">
-    <img src="img/linx.png" alt="Excalibur Sword" />
+    <img [src]="item().image" alt="Excalibur Sword" />
   </figure>
 
   <header class="item-header">
-    <h2 class="item-name">Excalibur</h2>
+    <h2 class="item-name">{{ item().name }}</h2>
   </header>
 
-  <p class="item-description">A legendary sword of unmatched sharpness and history.</p>
+  <p class="item-description">
+    {{ item().description }}
+  </p>
 
   <footer>
-    <p class="item-price">$199</p>
+    <p class="item-price">{{ item().price }} €</p>
   </footer>
 </article>
