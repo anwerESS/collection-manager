@@ -8,6 +8,10 @@
     {
       "folderPath": "collection-manager\\src\\",
       "color": "foldercolorizer.color_99cccc"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\components\\collection-item-card\\",
+      "color": "foldercolorizer.color_66cc00"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",
