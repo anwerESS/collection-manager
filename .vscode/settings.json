@@ -1,0 +1,15 @@
+{
+  "git.decorations.enabled": false,
+  "folder-color.pathColors": [
+    {
+      "folderPath": "collection-manager\\src\\app\\",
+      "color": "foldercolorizer.color_cccc33"
+    },
+    {
+      "folderPath": "collection-manager\\src\\",
+      "color": "foldercolorizer.color_99cccc"
+    }
+  ],
+  "workbench.tree.renderIndentGuides": "always",
+  "explorer.compactFolders": false
+}
