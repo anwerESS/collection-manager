@@ -11,7 +11,9 @@ export class SearchBar {
 
   search = input("Initial");
   searchChange = output<string>();
-  searchButtonClicked: OutputEmitterRef<void> = output<void>();
+  searchButtonClicked: OutputEmitterRef<void> = output<void>({
+    alias: 'submit'
+  });
 
   searchClick() {
     this.searchButtonClicked.emit();
