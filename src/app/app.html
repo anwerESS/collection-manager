@@ -1,16 +1,14 @@
 <header id="collection-header">
   <h1>My Collection</h1>
   <div>
-    <app-search-bar
-      (submit)="increaseCount()"
-      [(search)]="search"
-    >
-    </app-search-bar>
+    <app-search-bar (submit)="increaseCount()" [(search)]="search"> </app-search-bar>
     Search: {{ search }}<br />
     Clicked Count: {{ count }}
   </div>
 </header>
 <section class="collection-grid">
-  <app-collection-item-card [item]="linx"></app-collection-item-card>
-  <app-collection-item-card [item]="coin"></app-collection-item-card>
+  <app-collection-item-card
+    [item]="collectionItems[selectedItemIndex()]"
+  ></app-collection-item-card>
 </section>
+<button (click)="toggleItem()">Toggle item</button>
