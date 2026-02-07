@@ -1,14 +1,13 @@
 <header id="collection-header">
-  <h1>My Collection</h1>
+  <h1>{{ selectedCollection()?.title }}</h1>
   <div>
-    <app-search-bar (submit)="increaseCount()" [(search)]="search"> </app-search-bar>
-    Search: {{ search }}<br />
-    Clicked Count: {{ count }}
+    <app-search-bar [(search)]="search"> </app-search-bar>
   </div>
 </header>
 <section class="collection-grid">
-  <app-collection-item-card
-    [item]="collectionItems[selectedItemIndex()]"
-  ></app-collection-item-card>
+  @for (item of displayedItems(); track item.name) {
+    <app-collection-item-card [item]="item"></app-collection-item-card>
+  } @empty {
+    <div>Aucun objet ne correspond à la recherche.</div>
+  }
 </section>
-<button (click)="toggleItem()">Toggle item</button>

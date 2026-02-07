@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, model, signal } from '@angular/core';
 import { CollectionItemCard } from "./components/collection-item-card/collection-item-card";
 import { CollectionItem } from './models/collection-item';
 import { SearchBar } from "./components/search-bar/search-bar";
+import { Collection } from './models/collection';
 
 @Component({
   selector: 'app-root',
@@ -12,19 +13,21 @@ import { SearchBar } from "./components/search-bar/search-bar";
 })
 export class App {
 
-  count = 0;
-  search = '';
+  search = model('');
 
   coin!: CollectionItem;
   linx!: CollectionItem;
+  stamp!: CollectionItem;
 
-  collectionItems: CollectionItem[] = [];
-  selectedItemIndex = signal(0);
-  selectedItem = computed(() => this.collectionItems[this.selectedItemIndex()]);
-
-  loggingEffect = effect(() => {
-    console.log(this.selectedItemIndex(), this.selectedItem());
-  })
+  selectedCollection = signal<Collection | null>(null);
+  displayedItems = computed(() => {
+    const allItems = this.selectedCollection()?.items || [];
+    return allItems.filter(item =>
+      item.name.toLowerCase().includes(
+        this.search().toLocaleLowerCase()
+      )
+    );
+  });
 
   constructor() {
     this.coin = new CollectionItem();
@@ -34,20 +37,23 @@ export class App {
     this.coin.image = 'img/coin1.png';
     this.coin.price = 170;
 
+    this.stamp = new CollectionItem();
+    this.stamp.name = 'Timbre 1800';
+    this.stamp.description = 'Un vieux timbre';
+    this.stamp.rarity = 'Rare';
+    this.stamp.image = 'img/timbre1.png';
+    this.stamp.price = 555;
+
     this.linx = new CollectionItem();
 
-    this.collectionItems = [
+    const defaultCollection = new Collection();
+    defaultCollection.title = "Collection mix";
+    defaultCollection.items = [
       this.coin,
-      this.linx
-    ]
-  }
-
-  increaseCount() {
-    this.count++;
-  }
-
-  toggleItem() {
-    this.selectedItemIndex.update(currentIndex => (currentIndex + 1) % 2);
+      this.linx,
+      this.stamp
+    ];
+    this.selectedCollection.set(defaultCollection);
   }
 
 }
