@@ -12,6 +12,7 @@ import { SearchBar } from "./components/search-bar/search-bar";
 export class App {
 
   count = 0;
+  search = '';
 
   coin!: CollectionItem;
   linx!: CollectionItem;

@@ -1,7 +1,13 @@
 <header id="collection-header">
   <h1>My Collection</h1>
   <div>
-    <app-search-bar (searchButtonClicked)="increaseCount()"></app-search-bar>
+    <app-search-bar
+      (searchButtonClicked)="increaseCount()"
+      [search]="search"
+      (searchChange)="search = $event"
+    >
+    </app-search-bar>
+    Search: {{ search }}<br />
     Clicked Count: {{ count }}
   </div>
 </header>
