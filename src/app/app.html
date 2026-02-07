@@ -7,7 +7,11 @@
 <section class="collection-grid">
   @for (item of displayedItems(); track item.name) {
     <app-collection-item-card [item]="item"></app-collection-item-card>
-  } @empty {
-    <div>Aucun objet ne correspond à la recherche.</div>
   }
 </section>
+@let displayedItemsCount = displayedItems().length;
+@if (displayedItemsCount > 0) {
+  <div class="centered">{{ displayedItemsCount }} objet(s) affiché(s).</div>
+} @else {
+  <div class="centered">Aucun résultat.</div>
+}

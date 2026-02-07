@@ -12,3 +12,8 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.centered {
+  margin-top: 1rem;
+  text-align: center;
+}
