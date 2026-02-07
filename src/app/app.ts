@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
 import { CollectionItemCard } from "./components/collection-item-card/collection-item-card";
 import { CollectionItem } from './models/collection-item';
 import { SearchBar } from "./components/search-bar/search-bar";
@@ -7,7 +7,8 @@ import { SearchBar } from "./components/search-bar/search-bar";
   selector: 'app-root',
   imports: [CollectionItemCard, SearchBar],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
 
