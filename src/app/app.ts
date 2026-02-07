@@ -11,6 +11,7 @@ import { CollectionItem } from './models/collection-item';
 export class App {
 
   coin!: CollectionItem;
+  linx!: CollectionItem;
 
   constructor() {
     this.coin = new CollectionItem();
@@ -19,6 +20,8 @@ export class App {
     this.coin.rarity = 'Commune';
     this.coin.image = 'img/coin1.png';
     this.coin.price = 170;
+
+    this.linx = new CollectionItem();
   }
 
 }
