@@ -3,7 +3,7 @@
   "folder-color.pathColors": [
     {
       "folderPath": "collection-manager\\src\\app\\",
-      "color": "foldercolorizer.color_cccc33",
+      "color": "foldercolorizer.color_cccc33"
     },
     {
       "folderPath": "collection-manager\\src\\",
@@ -16,6 +16,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\models\\",
       "color": "foldercolorizer.color_666600"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\components\\search-bar\\",
+      "color": "foldercolorizer.color_33cccc"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",

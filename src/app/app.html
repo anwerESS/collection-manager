@@ -1,3 +1,10 @@
+<header id="collection-header">
+  <h1>My Collection</h1>
+  <div>
+    <app-search-bar (searchButtonClicked)="increaseCount()"></app-search-bar>
+    Clicked Count: {{ count }}
+  </div>
+</header>
 <section class="collection-grid">
   <app-collection-item-card [item]="linx"></app-collection-item-card>
   <app-collection-item-card [item]="coin"></app-collection-item-card>
