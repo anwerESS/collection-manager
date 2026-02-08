@@ -1,6 +1,5 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, inject, input } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-collection-item-detail',
@@ -8,30 +7,19 @@ import { Subscription } from 'rxjs';
   templateUrl: './collection-item-detail.html',
   styleUrl: './collection-item-detail.css'
 })
-export class CollectionItemDetail implements OnInit, OnDestroy {
-
-  private readonly route = inject(ActivatedRoute);
+export class CollectionItemDetail {
   private readonly router = inject(Router);
-  itemId = signal<number | null>(null);
 
-  routeParamSubscription: Subscription | null = null;
 
-  ngOnInit(): void {
-    this.routeParamSubscription = this.route.params.subscribe(params => {
-      const selectedId = params['id'] ? parseInt(params['id']) : null;
-      this.itemId.set(selectedId);
-    })
-  }
+  /// id = input<string | null>(null); // doit etre id comme dans route ou definir un alias pour utliser une var avec un nom different
+  itemId = input<number | null, string | null>(null, { // signal de type number et recu de type string
+    alias: 'id',
+    transform: ((id: string | null) => id ? parseInt(id) : null)
+  });
 
   next() {
     const nextId = (this.itemId() || 0) + 1;
     this.router.navigate(['item', nextId]);
-  }
-
-  ngOnDestroy(): void {
-    if (this.routeParamSubscription) {
-      this.routeParamSubscription.unsubscribe();
-    }
   }
 
 }

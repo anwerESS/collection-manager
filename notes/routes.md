@@ -229,3 +229,203 @@ itemId = toSignal(
 ### 🎯 En une phrase
 
 > **`ActivatedRoute` lit l’URL, `Router` la modifie**.
+
+---
+
+# approche encore plus moderne
+## 🔹 `withComponentInputBinding()` — l’idée générale
+
+`withComponentInputBinding()` est une **option du Router Angular** qui dit :
+
+> 👉 *“Quand le Router instancie un composant, il peut lui fournir des valeurs comme s’il avait un parent qui lui passait des `@Input`.”*
+
+Autrement dit :
+👉 **le Router joue le rôle d’un composant parent**.
+
+---
+
+## 📌 Pourquoi cette fonctionnalité existe ?
+
+Historiquement :
+
+* Le Router **créait** les composants
+* Mais **ne se comportait pas comme un parent Angular**
+* Donc il **ne pouvait pas passer des `@Input`**
+
+➡️ Résultat :
+
+* `ActivatedRoute`
+* `params`, `data`, `queryParams`
+* beaucoup de code impératif
+
+`withComponentInputBinding()` **corrige cette anomalie historique**.
+
+---
+
+# 🧠 Le principe fondamental
+
+### Sans `withComponentInputBinding()`
+
+```
+Router ──▶ crée le composant
+          ❌ ne lui passe rien
+```
+
+### Avec `withComponentInputBinding()`
+
+```
+Router ──▶ crée le composant
+          ✅ lui passe des valeurs via @Input / input()
+```
+
+👉 Le Router devient un **fournisseur de données déclaratif**.
+
+---
+
+# 🔌 Quelles données le Router peut lier ?
+
+De façon générale, Angular peut lier :
+
+1. **Route params**
+2. **Query params**
+3. **Route data**
+4. **Resolve data**
+
+Tout ça **comme des inputs**.
+
+---
+
+## Exemple conceptuel (sans code)
+
+Imagine un composant avec ces entrées :
+
+```
+@Input() id
+@Input() page
+@Input() user
+```
+
+Avec `withComponentInputBinding()` :
+
+* `id` peut venir de l’URL
+* `page` des query params
+* `user` d’un resolver
+
+👉 **Le composant ne sait pas d’où ça vient**
+👉 Il reçoit juste des valeurs
+
+---
+
+# 🧬 Le Router comme “parent invisible”
+
+Dans Angular :
+
+* Un parent passe des données à un enfant via `@Input`
+* Avec `withComponentInputBinding()`, le Router **imite exactement ce mécanisme**
+
+```
+<router-outlet>
+   ⬇️
+   Router = parent invisible
+   ⬇️
+   Composant = enfant
+```
+
+➡️ Même sémantique que :
+
+```html
+<app-child [id]="42"></app-child>
+```
+
+---
+
+# 🧠 Pourquoi c’est IMPORTANT architecturalement ?
+
+Parce que ça :
+
+* découple le composant du Router
+* rend le composant plus pur
+* améliore la testabilité
+* réduit la connaissance du contexte
+
+👉 **Le composant ne “sait pas” qu’il vient d’une route.**
+
+---
+
+# 🧪 Testabilité (concept)
+
+Un composant qui dépend de :
+
+* `ActivatedRoute`
+* `Router`
+
+➡️ est **couplé au routing**
+
+Un composant qui dépend de :
+
+* `@Input`
+
+➡️ est **universel**
+
+* utilisable ailleurs
+* testable sans router
+
+---
+
+# ⚡ Performance & Change Detection
+
+`withComponentInputBinding()` fonctionne très bien avec :
+
+* `OnPush`
+* `Signals`
+* `Zoneless`
+
+Pourquoi ?
+
+* Le changement passe par **Input binding**
+* Angular sait précisément **quoi rafraîchir**
+
+---
+
+# 🧩 Quand le binding se déclenche ?
+
+Conceptuellement :
+
+* À la création du composant
+* À chaque changement d’URL correspondant
+* Sans recréer le composant
+
+👉 Comme un parent qui met à jour un input
+
+---
+
+# 🧠 Ce que `withComponentInputBinding()` NE FAIT PAS
+
+❌ Il ne remplace pas le Router
+❌ Il ne gère pas la navigation
+❌ Il ne supprime pas les routes
+❌ Il ne supprime pas `router-outlet`
+
+👉 Il **change seulement la façon de transmettre les données**.
+
+---
+
+# 🧭 Pourquoi Angular l’a introduit maintenant ?
+
+Parce que Angular évolue vers :
+
+* composants plus purs
+* moins d’effets de bord
+* plus de déclaratif
+* signals
+* zoneless
+
+👉 `withComponentInputBinding()` est **la brique manquante** pour aligner le Router avec cette vision.
+
+---
+
+# 🎯 Résumé mental
+
+> **`withComponentInputBinding()` permet au Router de se comporter comme un composant parent qui fournit des `@Input` au composant routé.**
+
+---
