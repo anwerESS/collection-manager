@@ -24,6 +24,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\services\\",
       "color": "foldercolorizer.color_6666ff"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\pages\\",
+      "color": "foldercolorizer.color_cc6699"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",
