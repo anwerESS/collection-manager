@@ -1,25 +1,18 @@
-import { Component, inject, input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-collection-item-detail',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './collection-item-detail.html',
   styleUrl: './collection-item-detail.css'
 })
 export class CollectionItemDetail {
-  private readonly router = inject(Router);
-
 
   /// id = input<string | null>(null); // doit etre id comme dans route ou definir un alias pour utliser une var avec un nom different
   itemId = input<number | null, string | null>(null, { // signal de type number et recu de type string
     alias: 'id',
     transform: ((id: string | null) => id ? parseInt(id) : null)
   });
-
-  next() {
-    const nextId = (this.itemId() || 0) + 1;
-    this.router.navigate(['item', nextId]);
-  }
 
 }

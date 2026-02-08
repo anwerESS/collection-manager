@@ -429,3 +429,164 @@ Parce que Angular évolue vers :
 > **`withComponentInputBinding()` permet au Router de se comporter comme un composant parent qui fournit des `@Input` au composant routé.**
 
 ---
+
+
+# Navigation declarative
+
+---
+
+## 1️⃣ Déclaratif vs Impératif (rappel rapide)
+
+### 🔴 Impératif
+
+> *“Fais quelque chose maintenant”*
+
+```ts
+this.router.navigate(['/item', id + 1]);
+```
+
+* Tu dis **comment** naviguer
+* Tu déclenches l’action **toi-même**
+* Couplage fort avec le Router
+
+---
+
+### 🟢 Déclaratif
+
+> *“Voilà l’état / l’intention”*
+
+```html
+<button [routerLink]="['/item', id + 1]">Next</button>
+```
+
+* Tu déclares une **intention**
+* Angular gère le *quand* et le *comment*
+* Le template décrit **l’UI + le comportement**
+
+---
+
+## 2️⃣ Ton exemple décortiqué
+
+```html
+@let id = itemId();
+
+@if (id) {
+  <p>Item {{ id }}!</p>
+  <button [routerLink]="['/item', id + 1]">Next</button>
+} @else {
+  <p>New Item!</p>
+}
+```
+
+---
+
+### Ce qui est déclaratif ici
+
+### ✅ 1. Le rendu
+
+* `@if` décrit **quoi afficher**
+* basé uniquement sur l’état (`itemId()`)
+
+👉 Pas de logique métier impérative
+
+---
+
+### ✅ 2. La navigation
+
+```html
+<button [routerLink]="['/item', id + 1]">
+```
+
+* Tu ne déclenches pas la navigation
+* Tu **décris une relation entre un clic et une URL**
+* Angular fait le reste
+
+👉 C’est exactement la définition du déclaratif
+
+---
+
+## 3️⃣ Pourquoi c’est encore PLUS déclaratif avec Signals
+
+Parce que :
+
+* `itemId` est un **signal**
+* le template se met à jour **automatiquement**
+* aucun code TS n’est requis
+
+👉 Le composant devient une **pure projection d’état**
+
+---
+
+## 4️⃣ Comparaison mentale claire
+
+| Aspect                 | Avant               | Maintenant   |
+| ---------------------- | ------------------- | ------------ |
+| Lire l’URL             | Impératif           | Déclaratif   |
+| Réagir aux changements | Subscription        | Signal       |
+| Navigation             | `router.navigate()` | `routerLink` |
+| Couplage Router        | Fort                | Faible       |
+| Change detection       | Implicite           | Explicite    |
+
+---
+
+## 5️⃣ Est-ce que TOUT est déclaratif ?
+
+### ⚠️ Pas entièrement
+
+```html
+<button [routerLink]="...">
+```
+
+➡️ La navigation est déclarative
+➡️ MAIS l’événement `click` existe toujours
+
+👉 C’est du **déclaratif piloté par événement**
+
+Comme :
+
+```html
+<input [(ngModel)]="name">
+```
+
+---
+
+## 6️⃣ Pourquoi Angular pousse ce modèle ?
+
+Parce que :
+
+* plus lisible
+* plus testable
+* moins d’effets de bord
+* compatible zoneless
+* aligné avec signals
+
+👉 C’est la même philosophie que React, Solid, Vue (composition API)
+
+---
+
+## 7️⃣ Phrase clé à retenir (très importante)
+
+> **Tu ne dis pas “navigue”, tu dis “ce bouton représente cette URL”.**
+
+Angular :
+
+* écoute le clic
+* calcule l’URL
+* met à jour le Router
+* met à jour les inputs
+* met à jour le rendu
+
+---
+
+## 8️⃣ Conclusion nette
+
+✅ Oui, **c’est une navigation déclarative**
+✅ Elle est **plus pure** que `router.navigate()`
+✅ Elle s’intègre parfaitement avec :
+
+* `withComponentInputBinding()`
+* `input()`
+* `signals`
+* `zoneless`
+
+---
