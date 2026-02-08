@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, effect, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
 import { CollectionItemCard } from "./components/collection-item-card/collection-item-card";
 import { CollectionItem } from './models/collection-item';
 import { SearchBar } from "./components/search-bar/search-bar";
 import { Collection } from './models/collection';
+import { CollectionService } from './services/collection-service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,11 @@ import { Collection } from './models/collection';
 })
 export class App {
 
+  collectionService = inject(CollectionService);
+  count = 0;
   search = model('');
 
+  collection!: Collection;
   coin!: CollectionItem;
   linx!: CollectionItem;
   stamp!: CollectionItem;
@@ -30,30 +34,22 @@ export class App {
   });
 
   constructor() {
-    this.coin = new CollectionItem();
-    this.coin.name = 'Pièce de 1972';
-    this.coin.description = 'Pièce de 50 centimes de francs.';
-    this.coin.rarity = 'Commune';
-    this.coin.image = 'img/coin1.png';
-    this.coin.price = 170;
+    const allCollections = this.collectionService.getAll();
+    if (allCollections.length > 0) {
+      this.selectedCollection.set(allCollections[0]);
+    }
+  }
 
-    this.stamp = new CollectionItem();
-    this.stamp.name = 'Timbre 1800';
-    this.stamp.description = 'Un vieux timbre';
-    this.stamp.rarity = 'Rare';
-    this.stamp.image = 'img/timbre1.png';
-    this.stamp.price = 555;
+  addGenericItem() {
+    const genericItem = new CollectionItem();
+    const collection = this.selectedCollection();
 
-    this.linx = new CollectionItem();
+    if (!collection) return;
 
-    const defaultCollection = new Collection();
-    defaultCollection.title = "Collection mix";
-    defaultCollection.items = [
-      this.coin,
-      this.linx,
-      this.stamp
-    ];
-    this.selectedCollection.set(defaultCollection);
+    const updatedCollection = this.collectionService.addItem(
+      collection, genericItem
+    );
+    this.selectedCollection.set(updatedCollection);
   }
 
 }

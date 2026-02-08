@@ -20,6 +20,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\components\\search-bar\\",
       "color": "foldercolorizer.color_33cccc"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\services\\",
+      "color": "foldercolorizer.color_6666ff"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",
