@@ -6,10 +6,13 @@ import { CollectionItemCard } from "../../components/collection-item-card/collec
 import { Subscription } from 'rxjs';
 import { CollectionService } from '../../services/collection-service';
 import { Collection } from '../../models/collection';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-collection-item-detail',
-  imports: [ReactiveFormsModule, CollectionItemCard],
+  imports: [ReactiveFormsModule, CollectionItemCard, MatButtonModule, MatInputModule, MatSelectModule],
   templateUrl: './collection-item-detail.html',
   styleUrl: './collection-item-detail.css'
 })
@@ -53,6 +56,7 @@ export class CollectionItemDetail implements OnDestroy {
       }
       this.itemFormGroup.patchValue(itemToDisplay);
     });
+
     this.valueChangeSubscription = this.itemFormGroup.valueChanges.subscribe(_ => {
       this.collectionItem.set(Object.assign(new CollectionItem(), this.itemFormGroup.value));
     });

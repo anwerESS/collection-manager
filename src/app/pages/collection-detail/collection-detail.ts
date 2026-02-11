@@ -5,10 +5,11 @@ import { CollectionService } from '../../services/collection-service';
 import { CollectionItemCard } from '../../components/collection-item-card/collection-item-card';
 import { CollectionItem } from '../../models/collection-item';
 import { Router } from '@angular/router';
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: 'app-collection-detail',
-  imports: [CollectionItemCard, SearchBar],
+  imports: [CollectionItemCard, SearchBar, MatButtonModule],
   templateUrl: './collection-detail.html',
   styleUrl: './collection-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush
