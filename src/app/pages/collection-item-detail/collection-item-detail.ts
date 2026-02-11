@@ -1,19 +1,25 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import { form, required, Field } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-collection-item-detail',
-  imports: [FormsModule],
+  imports: [RouterLink, Field],
   templateUrl: './collection-item-detail.html',
-  styleUrl: './collection-item-detail.css'
+  styleUrl: './collection-item-detail.scss'
 })
 export class CollectionItemDetail {
 
-  name = '';
+  formModel = signal({
+    'name': ''
+  });
+
+  testForm = form(this.formModel, (schemaPath) => {
+    required(schemaPath.name, { message: 'Name is required' })
+  })
 
   submit(event: Event) {
     event.preventDefault();
-    console.log(this.name);
+    console.log(this.testForm().value());
   }
 
 }
