@@ -1,25 +1,22 @@
-import { Component, signal } from '@angular/core';
-import { form, required, Field } from '@angular/forms/signals';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-collection-item-detail',
-  imports: [RouterLink, Field],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './collection-item-detail.html',
-  styleUrl: './collection-item-detail.scss'
+  styleUrl: './collection-item-detail.css'
 })
 export class CollectionItemDetail {
 
-  formModel = signal({
-    'name': ''
-  });
-
-  testForm = form(this.formModel, (schemaPath) => {
-    required(schemaPath.name, { message: 'Name is required' })
-  })
+  nameFormControl = new FormControl('', [Validators.required]);
+  priceFormControl = new FormControl(0, [Validators.required, Validators.min(0)]);
 
   submit(event: Event) {
     event.preventDefault();
-    console.log(this.testForm().value());
+    console.log(this.nameFormControl.value);
+    console.log(this.priceFormControl.value);
   }
 
 }

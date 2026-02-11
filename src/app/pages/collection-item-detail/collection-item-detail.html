@@ -1,5 +1,19 @@
 <form (submit)="submit($event)">
-  <label>Name : </label>
-  <input [field]="testForm.name" /><br />
-  <button type="submit" [disabled]="!testForm().valid()">Submit</button>
+  <div class="form-field">
+    <label for="name">Name : </label>
+    <input id="name" name="name" [formControl]="nameFormControl" />
+    @if (nameFormControl.invalid && (nameFormControl.dirty || nameFormControl.touched)) {
+      <div class="error">This field is required!</div>
+    }
+  </div>
+  <div class="form-field">
+    <label for="price">Price : </label>
+    <input id="price" name="price" [formControl]="priceFormControl" />
+    @if (priceFormControl.invalid && (priceFormControl.dirty || priceFormControl.touched)) {
+      <div class="error">This field is required!</div>
+    }
+  </div>
+  <button type="submit" [disabled]="nameFormControl.invalid || priceFormControl.invalid">
+    Submit
+  </button>
 </form>
