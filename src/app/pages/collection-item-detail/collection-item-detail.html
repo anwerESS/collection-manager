@@ -1,7 +1,5 @@
-@let id = itemId();
-@if (id) {
-  <p>Item {{ id }}!</p>
-  <button [routerLink]="['/item', id + 1]">Next</button>
-} @else {
-  <p>New Item!</p>
-}
+<form (submit)="submit($event)">
+  <label>Name : </label>
+  <input name="name" [(ngModel)]="name" /><br />
+  <button type="submit">Submit</button>
+</form>
