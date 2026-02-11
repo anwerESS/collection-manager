@@ -1,19 +1,45 @@
-<form (submit)="submit($event)">
+<form [formGroup]="itemFormGroup" (submit)="submit($event)">
   <div class="form-field">
     <label for="name">Name : </label>
-    <input id="name" name="name" [formControl]="nameFormControl" />
-    @if (nameFormControl.invalid && (nameFormControl.dirty || nameFormControl.touched)) {
+    <input id="name" name="name" formControlName="name" />
+    @if (isFieldValid('name')) {
       <div class="error">This field is required!</div>
     }
+  </div>
+  <div class="form-field">
+    <label for="description">Description : </label>
+    <input id="description" name="description" formControlName="description" />
+    @if (isFieldValid('description')) {
+      <div class="error">This field is required!</div>
+    }
+  </div>
+  <div class="form-field">
+    <label for="image">Image</label>
+    <input id="image" name="image" type="file" (change)="onFileChange($event)" />
+    @if (isFieldValid('image')) {
+      <div class="error">This field is required.</div>
+    }
+  </div>
+  <div class="form-field">
+    <label for="rarity">Rarity</label>
+    <select id="rarity" name="rarity" formControlName="rarity">
+      @for (rarity of rarities; track rarity) {
+        <option [value]="rarity">{{ rarity }}</option>
+      }
+    </select>
   </div>
   <div class="form-field">
     <label for="price">Price : </label>
-    <input id="price" name="price" [formControl]="priceFormControl" />
-    @if (priceFormControl.invalid && (priceFormControl.dirty || priceFormControl.touched)) {
-      <div class="error">This field is required!</div>
+    <input id="price" name="price" formControlName="price" type="number" />
+    @if (isFieldValid('price')) {
+      @let priceFormControl = itemFormGroup.get('price');
+      @if (priceFormControl?.hasError('required')) {
+        <div class="error">This field is required!</div>
+      }
+      @if (priceFormControl?.hasError('min')) {
+        <div class="error">The value must be bigger or equal to 0!</div>
+      }
     }
   </div>
-  <button type="submit" [disabled]="nameFormControl.invalid || priceFormControl.invalid">
-    Submit
-  </button>
+  <button type="submit" [disabled]="itemFormGroup.invalid">Submit</button>
 </form>
