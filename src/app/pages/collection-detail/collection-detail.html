@@ -9,18 +9,24 @@
     @switch (item.rarity) {
       @case ('Legendary') {
         <div>
-          <app-collection-item-card [item]="item"></app-collection-item-card>
+          <app-collection-item-card
+            [item]="item"
+            (click)="openItem(item)"
+          ></app-collection-item-card>
           <hr class="gold" />
         </div>
       }
       @case ('Rare') {
         <div>
-          <app-collection-item-card [item]="item"></app-collection-item-card>
+          <app-collection-item-card
+            [item]="item"
+            (click)="openItem(item)"
+          ></app-collection-item-card>
           <hr class="dashed" />
         </div>
       }
       @default {
-        <app-collection-item-card [item]="item"></app-collection-item-card>
+        <app-collection-item-card [item]="item" (click)="openItem(item)"></app-collection-item-card>
       }
     }
   }
@@ -32,5 +38,5 @@
   <div class="centered">Aucun résultat.</div>
 }
 <div class="centered">
-  <button (click)="addGenericItem()">Ajouter Objet</button>
+  <button (click)="addItem()">Ajouter Objet</button>
 </div>

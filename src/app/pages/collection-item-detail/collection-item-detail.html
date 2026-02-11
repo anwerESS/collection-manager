@@ -43,5 +43,11 @@
       }
     }
   </div>
-  <button type="submit" [disabled]="itemFormGroup.invalid">Save</button>
+  <div>
+    <button type="button" (click)="cancel()">Cancel</button>
+    <button type="submit" [disabled]="itemFormGroup.invalid">Save</button>
+    @if (this.itemId()) {
+      <button type="button" (click)="deleteItem()">Delete</button>
+    }
+  </div>
 </form>

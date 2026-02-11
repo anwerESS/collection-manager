@@ -4,6 +4,7 @@ import { Collection } from '../../models/collection';
 import { CollectionService } from '../../services/collection-service';
 import { CollectionItemCard } from '../../components/collection-item-card/collection-item-card';
 import { CollectionItem } from '../../models/collection-item';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-collection-detail',
@@ -14,14 +15,10 @@ import { CollectionItem } from '../../models/collection-item';
 })
 export class CollectionDetail {
 
-  collectionService = inject(CollectionService);
-  count = 0;
-  search = model('');
+  private readonly router = inject(Router);
 
-  collection!: Collection;
-  coin!: CollectionItem;
-  linx!: CollectionItem;
-  stamp!: CollectionItem;
+  collectionService = inject(CollectionService);
+  search = model('');
 
   selectedCollection = signal<Collection | null>(null);
   displayedItems = computed(() => {
@@ -40,15 +37,12 @@ export class CollectionDetail {
     }
   }
 
-  addGenericItem() {
-    const genericItem = new CollectionItem();
-    const collection = this.selectedCollection();
-
-    if (!collection) return;
-
-    const updatedCollection = this.collectionService.addItem(
-      collection, genericItem
-    );
-    this.selectedCollection.set(updatedCollection);
+  addItem() {
+    this.router.navigate(['item']);
   }
+
+  openItem(item: CollectionItem) {
+    this.router.navigate(['item', item.id]);
+  }
+
 }

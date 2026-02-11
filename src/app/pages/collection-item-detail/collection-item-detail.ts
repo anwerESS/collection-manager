@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, OnDestroy, signal } from '@angular/core';
+import { Component, effect, inject, input, linkedSignal, OnDestroy, OnInit, signal, } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CollectionItem, Rarities } from '../../models/collection-item';
@@ -60,7 +60,28 @@ export class CollectionItemDetail implements OnDestroy {
 
   submit(event: Event) {
     event.preventDefault();
-    console.log(this.itemFormGroup.value);
+
+    const itemId = this.itemId();
+    if (itemId) {
+      this.collectionItem().id = itemId;
+      this.collectionService.updateItem(this.selectedCollection, this.collectionItem());
+    } else {
+      this.collectionService.addItem(this.selectedCollection, this.collectionItem());
+    }
+
+    this.router.navigate(['/']);
+  }
+
+  deleteItem() {
+    const itemId = this.itemId();
+    if (itemId) {
+      this.collectionService.deleteItem(this.selectedCollection.id, itemId);
+    }
+    this.router.navigate(['/']);
+  }
+
+  cancel() {
+    this.router.navigate(['/']);
   }
 
   isFieldValid(fieldName: string) {
