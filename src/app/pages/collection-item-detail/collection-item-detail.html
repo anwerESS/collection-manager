@@ -1,3 +1,5 @@
+<app-collection-item-card [item]="collectionItem()" />
+
 <form [formGroup]="itemFormGroup" (submit)="submit($event)">
   <div class="form-field">
     <label for="name">Name : </label>
@@ -8,7 +10,7 @@
   </div>
   <div class="form-field">
     <label for="description">Description : </label>
-    <input id="description" name="description" formControlName="description" />
+    <textarea id="description" name="description" formControlName="description" rows="5"></textarea>
     @if (isFieldValid('description')) {
       <div class="error">This field is required!</div>
     }
@@ -41,5 +43,5 @@
       }
     }
   </div>
-  <button type="submit" [disabled]="itemFormGroup.invalid">Submit</button>
+  <button type="submit" [disabled]="itemFormGroup.invalid">Save</button>
 </form>

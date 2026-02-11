@@ -22,3 +22,13 @@ label {
   font-size: x-small;
   color: red;
 }
+
+app-collection-item-card {
+  margin: 10px 0;
+}
+
+:host {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
