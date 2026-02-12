@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../../models/user';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 
 export interface LoginCredentialsDTO {
@@ -27,6 +27,25 @@ export class LoginService {
         localStorage.setItem(this.LK_TOKEN, result['token']);
       })
     )
+  }
+
+  getUser(): Observable<User | null | undefined> {
+    return this.http.get(this.BASE_URL + '/me/').pipe(
+      tap((result: any) => {
+        const user = Object.assign(new User(), result);
+        this.user.set(user);
+      }),
+      map(() => this.user())
+    );
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(this.BASE_URL + '/logout/', {}).pipe(
+      tap(() => {
+        localStorage.removeItem(this.LK_TOKEN);
+        this.user.set(null);
+      })
+    );
   }
 
 }

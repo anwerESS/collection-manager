@@ -18,7 +18,7 @@ export class LoginComponent implements OnDestroy {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
 
-  private loginSubscription: Subscription | null = null;
+  private readonly subscriptions: Subscription = new Subscription();
 
   loginFormGroup = this.formBuilder.group({
     'username': ['', [Validators.required]],
@@ -28,12 +28,20 @@ export class LoginComponent implements OnDestroy {
 
 
   login() {
-    this.loginSubscription = this.loginService.login(
+    const loginSubscription = this.loginService.login(
       this.loginFormGroup.value as LoginCredentialsDTO
     ).subscribe({
-      next: () => this.navigateHome(),
+      next: () => this.getUserAndRedirect(),
       error: () => this.invalidCredentials.set(true)
     });
+    this.subscriptions.add(loginSubscription);
+  }
+
+  getUserAndRedirect() {
+    const getUserSubscription = this.loginService.getUser().subscribe(user => {
+      this.navigateHome();
+    });
+    this.subscriptions.add(getUserSubscription);
   }
 
   navigateHome() {
@@ -41,6 +49,6 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.loginSubscription?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }
