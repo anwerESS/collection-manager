@@ -28,6 +28,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\pages\\",
       "color": "foldercolorizer.color_cc6699"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\pages\\login\\",
+      "color": "foldercolorizer.color_3366cc"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",
