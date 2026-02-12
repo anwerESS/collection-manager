@@ -36,6 +36,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\interceptors\\",
       "color": "foldercolorizer.color_cc0000"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\guards\\",
+      "color": "foldercolorizer.color_cc6600"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",
