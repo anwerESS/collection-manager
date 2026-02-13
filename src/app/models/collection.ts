@@ -1,10 +1,12 @@
+import { ICollectionDTO } from "../interfaces/collection-dto";
 import { CollectionItem } from "./collection-item";
 
 export class Collection {
 
-  id = -1;
+  id?: number;
   title: string = "My Collection";
   items: CollectionItem[] = [];
+  itemsCount?: number;
 
   copy(): Collection {
     const copy = Object.assign(new Collection(), this);
@@ -12,4 +14,18 @@ export class Collection {
     return copy;
   }
 
+  static fromDTO(collectionData: ICollectionDTO) {
+    return Object.assign(new Collection(), {
+      ...collectionData,
+      items: collectionData.items?.map(
+        item => CollectionItem.fromDTO(item)
+      )
+    });
+  }
+
+  toDTO(): ICollectionDTO {
+    return {
+      title: this.title
+    };
+  }
 }

@@ -40,6 +40,10 @@
     {
       "folderPath": "collection-manager\\src\\app\\guards\\",
       "color": "foldercolorizer.color_cc6600"
+    },
+    {
+      "folderPath": "collection-manager\\src\\app\\interfaces\\",
+      "color": "foldercolorizer.color_669966"
     }
   ],
   "workbench.tree.renderIndentGuides": "always",

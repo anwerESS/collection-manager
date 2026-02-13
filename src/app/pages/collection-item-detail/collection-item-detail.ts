@@ -1,14 +1,15 @@
-import { Component, effect, inject, input, linkedSignal, OnDestroy, OnInit, signal, } from '@angular/core';
+import { Component, inject, input, linkedSignal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CollectionItem, Rarities } from '../../models/collection-item';
 import { CollectionItemCard } from "../../components/collection-item-card/collection-item-card";
-import { Subscription } from 'rxjs';
-import { CollectionService } from '../../services/collection-service';
-import { Collection } from '../../models/collection';
+import { catchError, EMPTY, filter, switchMap, tap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { CollectionItemService } from '../../services/collection-item/collection-item-service';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { CollectionService } from '../../services/collection-service';
 
 @Component({
   selector: 'app-collection-item-detail',
@@ -16,20 +17,21 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './collection-item-detail.html',
   styleUrl: './collection-item-detail.css'
 })
-export class CollectionItemDetail implements OnDestroy {
+export class CollectionItemDetail {
 
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly collectionItemService = inject(CollectionItemService);
   private readonly collectionService = inject(CollectionService);
 
   rarities = Object.values(Rarities);
 
-  itemId = input<number | null, string | null>(null, {
+  itemId = input<number | undefined, string | undefined>(undefined, {
     alias: 'id',
-    transform: ((id: string | null) => id ? parseInt(id) : null)
+    transform: ((id: string | undefined) => id ? parseInt(id) : undefined)
   });
 
-  selectedCollection!: Collection;
+  selectedCollection = linkedSignal(() => this.collectionService.selectedCollection());
   collectionItem = signal<CollectionItem>(new CollectionItem());
 
   itemFormGroup = this.fb.group({
@@ -40,51 +42,72 @@ export class CollectionItemDetail implements OnDestroy {
     price: [0, [Validators.required, Validators.min(0)]]
   });
 
-  valueChangeSubscription: Subscription | null = null;
+  collectionItem$ = toObservable(this.itemId).pipe(
+    takeUntilDestroyed(),
+    filter(itemId => itemId !== undefined),
+    switchMap(itemId => this.collectionItemService.get(itemId)),
+    tap(item => {
+      this.collectionItem.set(item);
+      this.itemFormGroup.patchValue(item);
+    }),
+  )
+
+  itemCollection$ = this.collectionItem$.pipe(
+    takeUntilDestroyed(),
+    switchMap(item => this.collectionService.get(item.collectionId)),
+    catchError(error => {
+      this.navigateBack();
+      return EMPTY;
+    }),
+    tap(collection => {
+      this.selectedCollection.set(collection);
+    })
+  )
+
+  formValueChanges$ = this.itemFormGroup.valueChanges.pipe(
+    takeUntilDestroyed(),
+    tap(_ => {
+      this.collectionItem.set(Object.assign(new CollectionItem(), {
+        ...this.itemFormGroup.value,
+        id: this.itemId(),
+        collectionId: this.selectedCollection()?.id
+      }));
+    })
+  )
 
   constructor() {
-    effect(() => {
-      let itemToDisplay = new CollectionItem();
-      this.selectedCollection = this.collectionService.getAll()[0];
-      if (this.itemId()) {
-        const itemFound = this.selectedCollection.items.find(item => item.id === this.itemId());
-        if (itemFound) {
-          itemToDisplay = itemFound;
-        } else {
-          this.router.navigate(['not-found']);
-        }
-      }
-      this.itemFormGroup.patchValue(itemToDisplay);
-    });
-
-    this.valueChangeSubscription = this.itemFormGroup.valueChanges.subscribe(_ => {
-      this.collectionItem.set(Object.assign(new CollectionItem(), this.itemFormGroup.value));
-    });
+    this.collectionItem$.subscribe();
+    this.formValueChanges$.subscribe();
   }
 
   submit(event: Event) {
     event.preventDefault();
 
-    const itemId = this.itemId();
-    if (itemId) {
-      this.collectionItem().id = itemId;
-      this.collectionService.updateItem(this.selectedCollection, this.collectionItem());
+    const item = this.collectionItem();
+    if (!item) return;
+
+    let saveObservable = null;
+    if (item.id) {
+      saveObservable = this.collectionItemService.update(item);
     } else {
-      this.collectionService.addItem(this.selectedCollection, this.collectionItem());
+      saveObservable = this.collectionItemService.add(item);
     }
 
-    this.router.navigate(['/']);
+    saveObservable.subscribe(() => {
+      this.navigateBack();
+    });
   }
 
   deleteItem() {
-    const itemId = this.itemId();
-    if (itemId) {
-      this.collectionService.deleteItem(this.selectedCollection.id, itemId);
+    const item = this.collectionItem();
+    if (item) {
+      this.collectionItemService.delete(item).subscribe(() => {
+        this.navigateBack();
+      });
     }
-    this.router.navigate(['/']);
   }
 
-  cancel() {
+  navigateBack() {
     this.router.navigate(['/']);
   }
 
@@ -104,10 +127,6 @@ export class CollectionItemDetail implements OnDestroy {
         });
       };
     }
-  }
-
-  ngOnDestroy(): void {
-    this.valueChangeSubscription?.unsubscribe();
   }
 
 }

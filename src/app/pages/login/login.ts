@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
 
   private readonly formBuilder = inject(FormBuilder);
   private readonly loginService = inject(LoginService);
@@ -45,7 +45,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   navigateHome() {
-    this.router.navigate(['home']);
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {
